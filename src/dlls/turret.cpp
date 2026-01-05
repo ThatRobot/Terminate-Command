@@ -1186,8 +1186,15 @@ void CSentry::Spawn()
 
 void CSentry::Shoot(Vector &vecSrc, Vector &vecDirToEnemy)
 {
+	/*
 	FireBullets( 1, vecSrc, vecDirToEnemy, TURRET_SPREAD, TURRET_RANGE, BULLET_MONSTER_MP5, 1 );
-	
+	*/
+	CBaseEntity* pBullet = CBaseEntity::PBFirePhysBullet();
+	pBullet->pev->origin = vecSrc;
+	pBullet->pev->angles = UTIL_VecToAngles(vecDirToEnemy);
+	pBullet->pev->velocity = vecDirToEnemy * 1000;
+	pBullet->pev->owner = ENT(pev);
+
 	switch(RANDOM_LONG(0,2))
 	{
 	case 0: EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/hks1.wav", 1, ATTN_NORM); break;

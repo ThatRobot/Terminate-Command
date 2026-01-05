@@ -85,6 +85,7 @@ void CMP5::Precache( void )
 	PRECACHE_MODEL("models/p_9mmAR.mdl");
 
 	m_iShell = PRECACHE_MODEL ("models/shell.mdl");// brass shellTE_MODEL
+	PRECACHE_MODEL("models/bullet.mdl");
 
 	PRECACHE_MODEL("models/grenade.mdl");	// grenade
 
@@ -192,19 +193,37 @@ void CMP5::PrimaryAttack()
 					+ gpGlobals->v_forward * 20 
 					+ gpGlobals->v_right * 4, vecShellVelocity, pev->angles.y, m_iShell, TE_BOUNCE_SHELL); 
 	
-	Vector vecSrc	 = m_pPlayer->GetGunPosition( );
+	//Vector vecSrc	 = m_pPlayer->GetGunPosition( );
+	Vector vecSrc = m_pPlayer->GetGunPosition() - gpGlobals->v_up * 2 - gpGlobals->v_right;
 	Vector vecAiming = m_pPlayer->GetAutoaimVector( AUTOAIM_5DEGREES );
 	
 	if ( g_pGameRules->IsDeathmatch() )
 	{
 		// optimized multiplayer. Widened to make it easier to hit a moving player
-		m_pPlayer->FireBullets( 1, vecSrc, vecAiming, VECTOR_CONE_10DEGREES, 8192, BULLET_PLAYER_MP5, 2 );
-		//m_pPlayer->PBFirePhysBullet(1, vecSrc, VECTOR_CONE_10DEGREES, vecAiming * 900, 2048, BULLET_MONSTER_MP5);
+		//m_pPlayer->FireBullets( 1, vecSrc, vecAiming, VECTOR_CONE_10DEGREES, 8192, BULLET_PLAYER_MP5, 2 );
+		
+		// new stuff
+		//PBFirePhysBullet(1, vecSrc, VECTOR_CONE_10DEGREES, vecAiming * 900, 2048, BULLET_MONSTER_MP5);
+		CBaseEntity* pBullet = CBaseEntity::PBFirePhysBullet();
+		pBullet->pev->origin = vecSrc;
+		pBullet->pev->angles = UTIL_VecToAngles(vecAiming);
+		pBullet->pev->owner = m_pPlayer->edict();
+
+		pBullet->pev->velocity = vecAiming * 1600;
 	}
 	else
 	{
 		// single player spread
-		m_pPlayer->FireBullets( 1, vecSrc, vecAiming, VECTOR_CONE_8DEGREES, 8192, BULLET_PLAYER_MP5, 2 );
+		//m_pPlayer->FireBullets( 1, vecSrc, vecAiming, VECTOR_CONE_8DEGREES, 8192, BULLET_PLAYER_MP5, 2 );
+		
+		// new stuff
+		CBaseEntity* pBullet = CBaseEntity::PBFirePhysBullet();
+
+		pBullet->pev->origin = vecSrc;
+		pBullet->pev->angles = UTIL_VecToAngles(vecAiming);
+		pBullet->pev->owner = m_pPlayer->edict();
+
+		pBullet->pev->velocity = vecAiming * 1600;
 	}
 
 	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)

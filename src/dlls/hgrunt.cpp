@@ -798,9 +798,15 @@ void CHGrunt :: Shoot ( void )
 
 	Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40,90) + gpGlobals->v_up * RANDOM_FLOAT(75,200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
 	EjectBrass ( vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL); 
-	FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_10DEGREES, 2048, BULLET_MONSTER_MP5 ); // shoot +-5 degrees
 
-	//PBFirePhysBullet(1, vecShootOrigin, VECTOR_CONE_10DEGREES, vecShootDir*900, 2048, BULLET_MONSTER_MP5);
+	//FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_10DEGREES, 2048, BULLET_MONSTER_MP5 ); // shoot +-5 degrees
+	//new phys bullet shit
+	CBaseEntity* pBullet = CBaseEntity::PBFirePhysBullet();
+	pBullet->pev->origin = vecShootOrigin;
+	pBullet->pev->angles = UTIL_VecToAngles(vecShootDir);
+	pBullet->pev->velocity = vecShootDir * 1000;
+	pBullet->pev->owner = ENT(pev);
+
 
 	pev->effects |= EF_MUZZLEFLASH;
 	

@@ -207,7 +207,7 @@ void EjectBrass ( const Vector &vecOrigin, const Vector &vecVelocity, float rota
 		WRITE_COORD( vecOrigin.x);
 		WRITE_COORD( vecOrigin.y);
 		WRITE_COORD( vecOrigin.z);
-		WRITE_COORD( vecVelocity.x);
+		WRITE_COORD( vecVelocity.x); 
 		WRITE_COORD( vecVelocity.y);
 		WRITE_COORD( vecVelocity.z);
 		WRITE_ANGLE( rotation );

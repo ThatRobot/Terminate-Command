@@ -74,6 +74,7 @@ void CGlock::Precache( void )
 	PRECACHE_MODEL("models/p_9mmhandgun.mdl");
 
 	m_iShell = PRECACHE_MODEL ("models/shell.mdl");// brass shell
+	PRECACHE_MODEL("models/bullet.mdl");
 
 	PRECACHE_SOUND("items/9mmclip1.wav");
 	PRECACHE_SOUND("items/9mmclip2.wav");
@@ -173,7 +174,8 @@ void CGlock::GlockFire( float flSpread , float flCycleTime, BOOL fUseAutoAim )
 		EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/pl_gun3.wav", RANDOM_FLOAT(0.92, 1.0), ATTN_NORM, 0, 98 + RANDOM_LONG(0,3));
 	}
 
-	Vector vecSrc	 = m_pPlayer->GetGunPosition( );
+	//Vector vecSrc	 = m_pPlayer->GetGunPosition( );
+	Vector vecSrc = m_pPlayer->GetGunPosition() - gpGlobals->v_up * 2 - gpGlobals->v_right;
 	Vector vecAiming;
 	
 	if ( fUseAutoAim )
@@ -185,7 +187,14 @@ void CGlock::GlockFire( float flSpread , float flCycleTime, BOOL fUseAutoAim )
 		vecAiming = gpGlobals->v_forward;
 	}
 
-	m_pPlayer->FireBullets( 1, vecSrc, vecAiming, Vector( flSpread, flSpread, flSpread ), 8192, BULLET_PLAYER_9MM, 0 );
+	//m_pPlayer->FireBullets( 1, vecSrc, vecAiming, Vector( flSpread, flSpread, flSpread ), 8192, BULLET_PLAYER_9MM, 0 );
+	CBaseEntity* pBullet = CBaseEntity::PBFirePhysBullet();
+
+	pBullet->pev->origin = vecSrc;
+	pBullet->pev->angles = UTIL_VecToAngles(vecAiming);
+	pBullet->pev->owner = m_pPlayer->edict();
+	pBullet->pev->velocity = vecAiming * 400;
+
 	m_flNextPrimaryAttack = m_flNextSecondaryAttack = gpGlobals->time + flCycleTime;
 
 	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)

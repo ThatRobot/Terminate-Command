@@ -242,11 +242,12 @@ public:
 	int			ShouldToggle( USE_TYPE useType, BOOL currentState );
 	void		FireBullets( ULONG	cShots, Vector  vecSrc, Vector	vecDirShooting,	Vector	vecSpread, float flDistance, int iBulletType, int iTracerFreq = 4, int iDamage = 0, entvars_t *pevAttacker = NULL  );
 	
-	/*void PBPrecache();
+	void PBPrecache();
 	void PBMakeBullet();
-	void PBFirePhysBullet(ULONG cShots, Vector vecSrc, Vector vecSpread, Vector vecVelocity, int iBulletType, int iDamage, entvars_t* pevAttacker = NULL);
+	//static CBaseEntity *PBFirePhysBullet(ULONG cShots, Vector vecSrc, Vector vecSpread, Vector vecVelocity, int iBulletType, int iDamage, entvars_t* pevAttacker = NULL);
+	static CBaseEntity* PBFirePhysBullet(void);
 	void PBBulletTouch(CBaseEntity* pOther);
-	void PBBulletBubbles(CBaseEntity* pOther);*/
+	void PBBulletBubbles(CBaseEntity* pOther);
 	virtual CBaseEntity *Respawn( void ) { return NULL; }
 
 	void SUB_UseTargets( CBaseEntity *pActivator, USE_TYPE useType, float value );

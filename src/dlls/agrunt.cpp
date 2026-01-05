@@ -464,26 +464,27 @@ void CAGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent )
 				WRITE_BYTE( 128 );			// brightness
 			MESSAGE_END();
 
-			//CBaseEntity *pHornet = CBaseEntity::Create( "hornet", vecArmPos, UTIL_VecToAngles( vecDirToEnemy ), edict() );
-			//UTIL_MakeVectors ( pHornet->pev->angles );
+			CBaseEntity *pHornet = CBaseEntity::Create( "hornet", vecArmPos, UTIL_VecToAngles( vecDirToEnemy ), edict() );
+			UTIL_MakeVectors ( pHornet->pev->angles );
 
 			// AGrunt shoots nades now - like QUAKE! - T/Bot
+			// this sucks nevermind - T/Bot
 
-			Vector vecTarget = Vector(m_hEnemy->pev->origin.x, m_hEnemy->pev->origin.y, m_hEnemy->pev->absmin.z);;
-			vecTarget = vecTarget + ((vecTarget - pev->origin).Length() / gSkillData.hgruntGrenadeSpeed) * m_hEnemy->pev->velocity;
-			Vector m_vecTossVelocity = VecCheckThrow(pev, GetGunPosition(), vecTarget, gSkillData.hgruntGrenadeSpeed, 0.5);
+			//Vector vecTarget = Vector(m_hEnemy->pev->origin.x, m_hEnemy->pev->origin.y, m_hEnemy->pev->absmin.z);;
+			//vecTarget = vecTarget + ((vecTarget - pev->origin).Length() / gSkillData.hgruntGrenadeSpeed) * m_hEnemy->pev->velocity;
+			//Vector m_vecTossVelocity = VecCheckThrow(pev, GetGunPosition(), vecTarget, gSkillData.hgruntGrenadeSpeed, 0.5);
 
 
-			CGrenade::ShootTimed(pev, vecArmPos, m_vecTossVelocity, 2.0);
+			//CGrenade::ShootTimed(pev, vecArmPos, m_vecTossVelocity, 2.0);
 
-			//pHornet->pev->velocity = gpGlobals->v_forward * 300;
+			pHornet->pev->velocity = gpGlobals->v_forward * 300;
 
-			//CBaseMonster *pHornetMonster = pHornet->MyMonsterPointer();
+			CBaseMonster *pHornetMonster = pHornet->MyMonsterPointer();
 
-			//if ( pHornetMonster )
-			//{
-			//	pHornetMonster->m_hEnemy = m_hEnemy;
-			//}
+			if ( pHornetMonster )
+			{
+				pHornetMonster->m_hEnemy = m_hEnemy;
+			}
 		}
 		break;
 
