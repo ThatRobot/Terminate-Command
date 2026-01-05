@@ -172,6 +172,7 @@ void CSquidSpit :: Touch ( CBaseEntity *pOther )
 		pOther->TakeDamage ( pev, pev, gSkillData.bullsquidDmgSpit, DMG_GENERIC );
 	}
 
+	//UTIL_Remove(this);
 	SetThink ( &CSquidSpit::SUB_Remove );
 	pev->nextthink = gpGlobals->time;
 }

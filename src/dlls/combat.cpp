@@ -1359,70 +1359,105 @@ void CBaseMonster :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector
 	}
 }
 
-class PhysBullet : public CBaseEntity
-{
-public:
-	void MakeBullet();
-	void FirePhysBullet(ULONG cShots, Vector vecSrc, Vector	vecDirShooting, Vector	vecSpread, float flDistance, int iBulletType, int iTracerFreq = 4, int iDamage = 0, int iVelocity, entvars_t* pevAttacker = NULL);
-	void BulletTouch( CBaseEntity* pOther);
-};
-
-void PhysBullet::MakeBullet()
-{
-	pev->movetype = MOVETYPE_FLY;
-	pev->classname = MAKE_STRING("bullet");
-
-	pev->solid = SOLID_BBOX;
-
-	SET_MODEL(ENT(pev), "models/shell.mdl");
-	pev->scale = 1;
-
-	UTIL_SetOrigin(pev, pev->origin);
-	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
-
-	SetTouch(PhysBullet::BulletTouch);
-	SetThink( NULL );
-	pev->nextthink = gpGlobals->time + 0.2;
-}
-
-void PhysBullet::FirePhysBullet(ULONG cShots, Vector vecSrc, Vector vecDirShooting, Vector	vecSpread, float flDistance, int iBulletType, int iTracerFreq, int iDamage, int iVelocity, entvars_t* pevAttacker)
-{
-
-}
-
-void PhysBullet::BulletTouch( CBaseEntity *pOther)
-{
-	TraceResult tr;
-	int		iPitch;
-
-	// hit sound
-	iPitch = RANDOM_FLOAT(90, 110);
-
-	switch (RANDOM_LONG(0, 1))
-	{
-	case 0:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/ric1.wav", 1, ATTN_NORM, 0, iPitch);
-		break;
-	case 1:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/ric2.wav", 1, ATTN_NORM, 0, iPitch);
-		break;
-	}
-
-	if (!pOther->pev->takedamage)
-	{
-
-		// make a splat on the wall
-		UTIL_TraceLine(pev->origin, pev->origin + pev->velocity * 10, dont_ignore_monsters, ENT(pev), &tr);
-		//UTIL_DecalTrace(&tr, DECAL_SPIT1 + RANDOM_LONG(0, 1));
-		DecalGunshot(&tr, BULLET_PLAYER_MP5);
-	}
-	else
-	{
-		pOther->TakeDamage(pev, pev, gSkillData.plrDmgMP5, DMG_BULLET);
-	}
-
-	pev->nextthink = gpGlobals->time;
-}
+//void CBaseEntity::PBPrecache()
+//{
+//	PRECACHE_MODEL("models/shell.mdl");
+//
+//	PRECACHE_SOUND("weapons/ric1.wav");
+//	PRECACHE_SOUND("weapons/ric2.wav");
+//	PRECACHE_SOUND("weapons/ric3.wav");
+//	PRECACHE_SOUND("weapons/ric4.wav");
+//	PRECACHE_SOUND("weapons/ric5.wav");
+//}
+//
+//void CBaseEntity::PBMakeBullet(void)
+//{
+//	Precache();
+//	pev->movetype = MOVETYPE_FLY;
+//	pev->classname = MAKE_STRING("bullet");
+//
+//	pev->solid = SOLID_BBOX;
+//
+//	SET_MODEL(ENT(pev), "models/shell.mdl");
+//	pev->scale = 1;
+//
+//	UTIL_SetOrigin(pev, pev->origin);
+//	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
+//
+//	SetTouch(&CBaseEntity::PBBulletTouch);
+//	//SetThink(PhysBullet::BulletBubbles);
+//	pev->nextthink = gpGlobals->time + 0.2;
+//}
+//
+//void CBaseEntity::PBFirePhysBullet(ULONG cShots, Vector vecSrc, Vector	vecSpread, Vector vecVelocity, int iBulletType, int iDamage, entvars_t* pevAttacker)
+//{
+//	CBaseEntity* pBullet = GetClassPtr((CBaseEntity*)NULL);
+//	pBullet->PBMakeBullet();
+//
+//	UTIL_SetOrigin(pBullet->pev, vecSrc);
+//	pBullet->pev->velocity = vecVelocity;
+//	pBullet->pev->owner = ENT(pevAttacker);
+//
+//	//pBullet->SetThink(&PhysBullet::Animate);
+//	pBullet->pev->nextthink = gpGlobals->time + 0.1;
+//}
+//
+//void CBaseEntity::PBBulletTouch( CBaseEntity *pOther)
+//{
+//	TraceResult tr;
+//	int		iPitch;
+//
+//	// hit sound
+//	iPitch = RANDOM_FLOAT(90, 110);
+//
+//	switch (RANDOM_LONG(0, 4))
+//	{
+//	case 0:
+//		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/ric1.wav", 1, ATTN_NORM, 0, iPitch);
+//		break;
+//	case 1:
+//		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/ric2.wav", 1, ATTN_NORM, 0, iPitch);
+//		break;
+//	case 2:
+//		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/ric3.wav", 1, ATTN_NORM, 0, iPitch);
+//		break;
+//	case 3:
+//		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/ric4.wav", 1, ATTN_NORM, 0, iPitch);
+//		break;
+//	case 4:
+//		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/ric5.wav", 1, ATTN_NORM, 0, iPitch);
+//		break;
+//	}
+//
+//	if (!pOther->pev->takedamage)
+//	{
+//
+//		// make a bullet hole on the wall
+//		UTIL_TraceLine(pev->origin, pev->origin + pev->velocity * 10, dont_ignore_monsters, ENT(pev), &tr);
+//		//UTIL_DecalTrace(&tr, DECAL_SPIT1 + RANDOM_LONG(0, 1));
+//		DecalGunshot(&tr, BULLET_PLAYER_MP5);
+//		if (UTIL_PointContents(pev->origin) != CONTENTS_WATER)
+//		{
+//			UTIL_Sparks(pev->origin);
+//		}
+//	}
+//	else
+//	{
+//		pOther->TakeDamage(pev, pev, gSkillData.plrDmgMP5, DMG_BULLET);
+//	}
+//	SetThink(&CBaseEntity::SUB_Remove);
+//	pev->nextthink = gpGlobals->time;
+//}
+//
+//void CBaseEntity::PBBulletBubbles(CBaseEntity* pOther)
+//{
+//	pev->nextthink = gpGlobals->time + 0.1;
+//
+//	if (pev->waterlevel == 0)
+//		return;
+//
+//	UTIL_BubbleTrail(pev->origin - pev->velocity * 0.1, pev->origin, 1);
+//}
 
 /*
 ================

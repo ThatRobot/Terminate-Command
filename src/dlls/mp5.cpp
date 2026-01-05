@@ -199,6 +199,7 @@ void CMP5::PrimaryAttack()
 	{
 		// optimized multiplayer. Widened to make it easier to hit a moving player
 		m_pPlayer->FireBullets( 1, vecSrc, vecAiming, VECTOR_CONE_10DEGREES, 8192, BULLET_PLAYER_MP5, 2 );
+		//m_pPlayer->PBFirePhysBullet(1, vecSrc, VECTOR_CONE_10DEGREES, vecAiming * 900, 2048, BULLET_MONSTER_MP5);
 	}
 	else
 	{
