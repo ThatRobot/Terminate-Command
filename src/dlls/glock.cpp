@@ -175,7 +175,7 @@ void CGlock::GlockFire( float flSpread , float flCycleTime, BOOL fUseAutoAim )
 	}
 
 	//Vector vecSrc	 = m_pPlayer->GetGunPosition( );
-	Vector vecSrc = m_pPlayer->GetGunPosition() - gpGlobals->v_up * 2 - gpGlobals->v_right;
+	Vector vecSrc = m_pPlayer->GetGunPosition() - gpGlobals->v_up * 2 + gpGlobals->v_right;
 	Vector vecAiming;
 	
 	if ( fUseAutoAim )
@@ -193,7 +193,7 @@ void CGlock::GlockFire( float flSpread , float flCycleTime, BOOL fUseAutoAim )
 	pBullet->pev->origin = vecSrc;
 	pBullet->pev->angles = UTIL_VecToAngles(vecAiming);
 	pBullet->pev->owner = m_pPlayer->edict();
-	pBullet->pev->velocity = vecAiming * 400;
+	pBullet->pev->velocity = vecAiming * 100;
 
 	m_flNextPrimaryAttack = m_flNextSecondaryAttack = gpGlobals->time + flCycleTime;
 

@@ -804,7 +804,7 @@ void CHGrunt :: Shoot ( void )
 	CBaseEntity* pBullet = CBaseEntity::PBFirePhysBullet();
 	pBullet->pev->origin = vecShootOrigin;
 	pBullet->pev->angles = UTIL_VecToAngles(vecShootDir);
-	pBullet->pev->velocity = vecShootDir * 1000;
+	pBullet->pev->velocity = vecShootDir * 1600;
 	pBullet->pev->owner = ENT(pev);
 
 
@@ -916,7 +916,8 @@ void CHGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent )
 		case HGRUNT_AE_GREN_DROP:
 		{
 			UTIL_MakeVectors( pev->angles );
-			CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 17 - gpGlobals->v_right * 27 + gpGlobals->v_up * 6, g_vecZero, 3 );
+			// Don't do anything. You get yourself killed 90% of the time
+			//CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 17 - gpGlobals->v_right * 27 + gpGlobals->v_up * 6, g_vecZero, 3 );
 		}
 		break;
 

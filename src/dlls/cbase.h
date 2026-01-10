@@ -247,7 +247,7 @@ public:
 	//static CBaseEntity *PBFirePhysBullet(ULONG cShots, Vector vecSrc, Vector vecSpread, Vector vecVelocity, int iBulletType, int iDamage, entvars_t* pevAttacker = NULL);
 	static CBaseEntity* PBFirePhysBullet(void);
 	void PBBulletTouch(CBaseEntity* pOther);
-	void PBBulletBubbles(CBaseEntity* pOther);
+	void PBBulletBubbles( );
 	virtual CBaseEntity *Respawn( void ) { return NULL; }
 
 	void SUB_UseTargets( CBaseEntity *pActivator, USE_TYPE useType, float value );

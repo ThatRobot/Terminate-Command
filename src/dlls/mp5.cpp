@@ -194,7 +194,7 @@ void CMP5::PrimaryAttack()
 					+ gpGlobals->v_right * 4, vecShellVelocity, pev->angles.y, m_iShell, TE_BOUNCE_SHELL); 
 	
 	//Vector vecSrc	 = m_pPlayer->GetGunPosition( );
-	Vector vecSrc = m_pPlayer->GetGunPosition() - gpGlobals->v_up * 2 - gpGlobals->v_right;
+	Vector vecSrc = m_pPlayer->GetGunPosition() - gpGlobals->v_up * 2 + gpGlobals->v_right;
 	Vector vecAiming = m_pPlayer->GetAutoaimVector( AUTOAIM_5DEGREES );
 	
 	if ( g_pGameRules->IsDeathmatch() )

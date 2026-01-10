@@ -2570,12 +2570,14 @@ void PM_Jump (void)
 	PM_PreventMegaBunnyJumping();
 
 	// Make jump sound.
-	if (hasdoublejumped = 1) {
-		pmove->PM_PlaySound(CHAN_BODY, "player/plyrjmp.wav", 0.5, ATTN_NORM, 0, PITCH_NORM);
+	pmove->PM_PlaySound(CHAN_BODY, "player/plyrjmp2.wav", 0.5, ATTN_NORM, 0, PITCH_NORM);
+
+	/*if (hasdoublejumped = 1) {
+		pmove->PM_PlaySound(CHAN_BODY, "player/plyrjmp2.wav", 0.5, ATTN_NORM, 0, PITCH_NORM);
 	}
 	else {
 		PM_PlayStepSound(PM_MapTextureTypeStepType(pmove->chtexturetype), 1.0);
-	}
+	}*/
 
 	// See if user can super long jump?
 	cansuperjump = atoi( pmove->PM_Info_ValueForKey( pmove->physinfo, "slj" ) ) == 1 ? true : false;
@@ -2616,46 +2618,59 @@ void PM_Jump (void)
 				{
 					if (pmove->cmd.buttons & IN_BACK) // ..And backwards
 					{
-						pmove->velocity[i] = (-pmove->forward[i] + pmove->right[i]) * PLAYER_LONGJUMP_SPEED * 1.2;
+						pmove->velocity[i] = (-pmove->forward[i] + pmove->right[i]) * PLAYER_LONGJUMP_SPEED * 1.24;
+						//pmove->velocity[0] = (pmove->right[1] + pmove->right[i]) * PLAYER_LONGJUMP_SPEED * 1.2;
+						//pmove->velocity[1] = (-pmove->right[0] + pmove->right[i]) * PLAYER_LONGJUMP_SPEED * 1.2;
+						//break;
 					}
 					else if (pmove->cmd.buttons & IN_FORWARD) // ..And forwards
 					{
-						pmove->velocity[i] = (pmove->forward[i] + pmove->right[i]) * PLAYER_LONGJUMP_SPEED * 1.2;
+						pmove->velocity[i] = (pmove->forward[i] + pmove->right[i]) * PLAYER_LONGJUMP_SPEED * 1.24;
+						//pmove->velocity[0] = (-pmove->right[1] + pmove->right[i]) * PLAYER_LONGJUMP_SPEED * 1.2;
+						//pmove->velocity[1] = (pmove->right[0] + pmove->right[i]) * PLAYER_LONGJUMP_SPEED * 1.2;
+						//break;
 					}
 					else // and ONLY right
 					{
-						pmove->velocity[i] = pmove->right[i] * PLAYER_LONGJUMP_SPEED * 1.6;
+						pmove->velocity[i] = pmove->right[i] * PLAYER_LONGJUMP_SPEED * 1.7;
 					}
 				}
 				else if ((pmove->cmd.buttons & (IN_MOVERIGHT | IN_MOVELEFT)) == IN_MOVELEFT) // If moving left
 				{
 					if (pmove->cmd.buttons & IN_BACK) // ..And backwards
 					{
-						pmove->velocity[i] = (-pmove->forward[i] - pmove->right[i]) * PLAYER_LONGJUMP_SPEED * 1.2;
+						pmove->velocity[i] = (-pmove->forward[i] - pmove->right[i]) * PLAYER_LONGJUMP_SPEED * 1.24;
 					}
 					else if (pmove->cmd.buttons & IN_FORWARD) // ..And forwards
 					{
-						pmove->velocity[i] = (pmove->forward[i] - pmove->right[i]) * PLAYER_LONGJUMP_SPEED * 1.2;
+						pmove->velocity[i] = (pmove->forward[i] - pmove->right[i]) * PLAYER_LONGJUMP_SPEED * 1.24;
 					}
 					else // and ONLY left
 					{
-						pmove->velocity[i] = -pmove->right[i] * PLAYER_LONGJUMP_SPEED * 1.6;
+						pmove->velocity[i] = -pmove->right[i] * PLAYER_LONGJUMP_SPEED * 1.7;
 					}
 				}
 				else
 				{
 					if (pmove->cmd.buttons & IN_BACK) // If moving ONLY backward
 					{
-						pmove->velocity[i] = -pmove->forward[i] * PLAYER_LONGJUMP_SPEED * 1.6;
+						//pmove->velocity[i] = -pmove->forward[i] * PLAYER_LONGJUMP_SPEED * 1.7;
+						pmove->velocity[0] = pmove->right[1] * PLAYER_LONGJUMP_SPEED * 1.7;
+						pmove->velocity[1] = -pmove->right[0] * PLAYER_LONGJUMP_SPEED * 1.7;
+						break;
 					}
 					else if (pmove->cmd.buttons & IN_FORWARD) // If moving ONLY forward
 					{
-						pmove->velocity[i] = pmove->forward[i] * PLAYER_LONGJUMP_SPEED * 1.6;
+						//pmove->velocity[i] = pmove->forward[i] * PLAYER_LONGJUMP_SPEED * 1.7;
+						pmove->velocity[0] = -pmove->right[1] * PLAYER_LONGJUMP_SPEED * 1.7;
+						pmove->velocity[1] = pmove->right[0] * PLAYER_LONGJUMP_SPEED * 1.7;
+						break;
 					}
 				}
-				pmove->PM_PlaySound(CHAN_BODY, "player/plyrjmp.wav", 0.5, ATTN_NORM, 0, PITCH_NORM);
-				pmove->Con_DPrintf("forward is (.3%f .3%f .3%f)\n", pmove->forward[0], pmove->forward[1], pmove->forward[2]);
 			}
+			pmove->PM_PlaySound(CHAN_BODY, "player/plyrjmp.wav", 0.5, ATTN_NORM, 0, PITCH_NORM);
+			pmove->Con_DPrintf("forward is (%f %f %f)\n", pmove->forward[0], pmove->forward[1], pmove->forward[2]);
+			pmove->Con_DPrintf("right is (%f %f %f)\n", pmove->right[0], pmove->right[1], pmove->right[2]);
 		}
 		if(pmove->velocity[2] <= 0)
 			pmove->velocity[2] = sqrt(2 * 800 * 45.0);

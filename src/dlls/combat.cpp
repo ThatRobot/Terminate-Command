@@ -1383,7 +1383,7 @@ void CBaseEntity::PBMakeBullet(void)
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
 
 	SetTouch(&CBaseEntity::PBBulletTouch);
-	//SetThink(&CBaseEntity::PBBulletBubbles);
+	SetThink(&CBaseEntity::PBBulletBubbles);
 	pev->nextthink = gpGlobals->time + 0.2;
 }
 
@@ -1404,8 +1404,11 @@ CBaseEntity *CBaseEntity::PBFirePhysBullet( void )
 
 void CBaseEntity::PBBulletTouch( CBaseEntity *pOther)
 {
-	TraceResult tr;
+	TraceResult tr = UTIL_GetGlobalTrace();
 	int		iPitch;
+	entvars_t* pevOwner;
+	pevOwner = VARS(pev->owner);
+
 	ClearMultiDamage();
 	gMultiDamage.type = DMG_BULLET | DMG_NEVERGIB;
 
@@ -1433,7 +1436,6 @@ void CBaseEntity::PBBulletTouch( CBaseEntity *pOther)
 
 	if (!pOther->pev->takedamage)
 	{
-
 		// make a bullet hole on the wall
 		UTIL_TraceLine(pev->origin, pev->origin + pev->velocity * 10, dont_ignore_monsters, ENT(pev), &tr);
 		//UTIL_DecalTrace(&tr, DECAL_SPIT1 + RANDOM_LONG(0, 1));
@@ -1445,18 +1447,20 @@ void CBaseEntity::PBBulletTouch( CBaseEntity *pOther)
 	}
 	else
 	{
-		entvars_t* pevOwner;
-
-		pevOwner = VARS(pev->owner);
-
-		pOther->TakeDamage(pev, pev, gSkillData.plrDmgMP5, DMG_BULLET);
+		//pOther->TakeDamage(pev, pev, gSkillData.plrDmgMP5, DMG_BULLET);
+		pOther->TraceAttack(pevOwner, gSkillData.plrDmgMP5, pev->velocity.Normalize(), &tr, DMG_BULLET | DMG_NEVERGIB);
 		ApplyMultiDamage(pev, pevOwner);
 	}
+
+	// Figure out how to get texture hit sounds to play w/ phys bullet - T/Bot
+	// !!! BUG: ADD A CHECK TO STOP BULLETS RICOCHETING OFF EACH OTHER !!!
+	//TEXTURETYPE_PlaySound(&tr, vecSrc, vecEnd, iBulletType);
+
 	SetThink(&CBaseEntity::SUB_Remove);
 	pev->nextthink = gpGlobals->time;
 }
 
-void CBaseEntity::PBBulletBubbles(CBaseEntity* pOther)
+void CBaseEntity::PBBulletBubbles( )
 {
 	pev->nextthink = gpGlobals->time + 0.1;
 

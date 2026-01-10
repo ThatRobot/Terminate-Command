@@ -973,7 +973,7 @@ int DrawBar(int x, int y, int width, int height, float f)
 		width -= w;
 	}
 
-	UnpackRGB(r, g, b, RGB_REDISH);
+	UnpackRGB(r, g, b, RGB_GREENISH);
 
 	FillRGBA(x, y, width, height, r, g, b, 128);
 
@@ -1121,7 +1121,7 @@ int CHudAmmo::DrawWList(float flTime)
 						ScaleColors(r, g, b, 192);
 					else
 					{
-						UnpackRGB(r,g,b, RGB_REDISH);
+						UnpackRGB(r,g,b, RGB_GREENISH);
 						ScaleColors(r, g, b, 128);
 					}
 

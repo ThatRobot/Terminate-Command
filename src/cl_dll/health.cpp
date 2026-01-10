@@ -160,8 +160,10 @@ void CHudHealth::GetPainColor( int &r, int &g, int &b )
 	}
 	else
 	{
-		r = 250;
-		g = 0;
+		//r = 250;
+		//g = 0;
+		r = 0;
+		g = 250;
 		b = 0;
 	}
 #endif 
@@ -224,7 +226,8 @@ int CHudHealth::Draw(float flTime)
 
 		int iHeight = gHUD.m_iFontHeight;
 		int iWidth = HealthWidth/10;
-		FillRGBA(x, y, iWidth, iHeight, 255, 0, 0, a);
+		// the little line between health and armor annoys me, so alpha = 0
+		FillRGBA(x, y, iWidth, iHeight, 0, 250, 0, 0);
 	}
 
 	DrawDamage(flTime);

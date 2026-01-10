@@ -618,7 +618,13 @@ void CBaseTurret::ActiveThink(void)
 
 void CTurret::Shoot(Vector &vecSrc, Vector &vecDirToEnemy)
 {
-	FireBullets( 1, vecSrc, vecDirToEnemy, TURRET_SPREAD, TURRET_RANGE, BULLET_MONSTER_12MM, 1 );
+	//FireBullets( 1, vecSrc, vecDirToEnemy, TURRET_SPREAD, TURRET_RANGE, BULLET_MONSTER_12MM, 1 );
+	CBaseEntity* pBullet = CBaseEntity::PBFirePhysBullet();
+	pBullet->pev->origin = vecSrc;
+	pBullet->pev->angles = UTIL_VecToAngles(vecDirToEnemy);
+	pBullet->pev->velocity = vecDirToEnemy * 1900;
+	pBullet->pev->owner = ENT(pev);
+
 	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "turret/tu_fire1.wav", 1, 0.6);
 	pev->effects = pev->effects | EF_MUZZLEFLASH;
 }
@@ -626,7 +632,12 @@ void CTurret::Shoot(Vector &vecSrc, Vector &vecDirToEnemy)
 
 void CMiniTurret::Shoot(Vector &vecSrc, Vector &vecDirToEnemy)
 {
-	FireBullets( 1, vecSrc, vecDirToEnemy, TURRET_SPREAD, TURRET_RANGE, BULLET_MONSTER_9MM, 1 );
+	//FireBullets( 1, vecSrc, vecDirToEnemy, TURRET_SPREAD, TURRET_RANGE, BULLET_MONSTER_9MM, 1 );
+	CBaseEntity* pBullet = CBaseEntity::PBFirePhysBullet();
+	pBullet->pev->origin = vecSrc;
+	pBullet->pev->angles = UTIL_VecToAngles(vecDirToEnemy);
+	pBullet->pev->velocity = vecDirToEnemy * 1600;
+	pBullet->pev->owner = ENT(pev);
 
 	switch(RANDOM_LONG(0,2))
 	{
@@ -1192,7 +1203,7 @@ void CSentry::Shoot(Vector &vecSrc, Vector &vecDirToEnemy)
 	CBaseEntity* pBullet = CBaseEntity::PBFirePhysBullet();
 	pBullet->pev->origin = vecSrc;
 	pBullet->pev->angles = UTIL_VecToAngles(vecDirToEnemy);
-	pBullet->pev->velocity = vecDirToEnemy * 1000;
+	pBullet->pev->velocity = vecDirToEnemy * 1600;
 	pBullet->pev->owner = ENT(pev);
 
 	switch(RANDOM_LONG(0,2))
